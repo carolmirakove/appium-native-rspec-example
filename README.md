@@ -17,7 +17,7 @@ rspec . -t smoke
 
 Helpful Resources
 =================
-In my learning Appium I have been grateful for the [project  documentation](http://appium.io/slate/en/master/?ruby#), Dave Hunt's [Appium Bootcamp](http://sauceio.com/index.php/2014/07/appium-bootcamp-get-started-with-appium-testing-chapter-1/) as well as his [Selenium Guidebook](http://davehaeffner.com/selenium-guidebook/) plus 
+In my learning Appium I have been grateful for the [project  documentation](http://appium.io/slate/en/master/?ruby#), Dave Haeffner's [Appium Bootcamp](http://sauceio.com/index.php/2014/07/appium-bootcamp-get-started-with-appium-testing-chapter-1/) as well as his [Selenium Guidebook](http://davehaeffner.com/selenium-guidebook/) plus 
 [bootstraponline's](http://www.github.com/bootstraponline)
 bootstraponline's pointing me to the [Appium Ruby Console](https://github.com/appium/ruby_console) at a Selenium meetup in NYC.
 
