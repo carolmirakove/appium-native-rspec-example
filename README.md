@@ -1,4 +1,4 @@
-appium-native-rspec-example
+Appium Rspec Cross Platform
 ===========================
 
 This repository contains some example blackbox tests using Appium with Ruby bindings and the [Appium example app UICatalog](http://github.com/appium/sample-code/blob/master/sample-code/examples/ruby/UICatalog.app.zip) as the application under test.
@@ -12,7 +12,7 @@ Make sure the app path in the <code>appium.txt</code> matches your copy of the [
 Navigate to the <code>spec</code> directory and filter by tags, e.g., use the following command to run all tests that have been tagged with <code>:smoke</code>:
 
 ```
-rspec . -t smoke
+run ios . -t smoke
 ```
 
 Helpful Resources

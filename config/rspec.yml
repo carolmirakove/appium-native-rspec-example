@@ -1,0 +1,7 @@
+# config/rspec.yml
+##YAML Template
+---
+# android: PLATFORM=android -r src/support -r src/android -r src/pages -r src/specs
+
+
+# ios: PLATFORM=ios  -r src/support -r src/ios -r src/pages -r src/specs
