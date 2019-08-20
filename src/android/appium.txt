@@ -1,0 +1,10 @@
+[caps]
+platformName = "Android"
+deviceName = "192.168.56.101:5555"
+app = "prebuilt/omgshop.apk"
+#appPackage = "co.omisego.omgshop"
+#appWaitActivity = "co.omisego.omgshop"
+
+[appium_lib]
+sauce_username = false
+sauce_access_key = false

@@ -1,0 +1,10 @@
+[caps]
+platformName = "ios"
+platformVersion = "12.1"
+deviceName = "iPhone Simulator"
+automationName = "XCUITest"
+app = "prebuilt/OMGShop-cal.app"
+
+[appium_lib]
+sauce_username = false
+sauce_access_key = false

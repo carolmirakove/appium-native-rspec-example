@@ -1,0 +1,106 @@
+version: 0.1
+
+# Phases are collection of commands that get executed on Device Farm.
+phases:
+  # The install phase includes commands that install dependencies that your tests use.
+  # Default dependencies for testing frameworks supported on Device Farm are already installed.
+  install:
+    commands:
+    # Error:
+    # [DeviceFarm] bundle install
+    # /home/device-farm/.rvm/rubies/ruby-2.5.3/lib/ruby/2.5.0/tmpdir.rb:35:in `tmpdir': could not find a temporary directory (ArgumentError)
+
+    - mkdir /tmp/tempdir
+    - export TMPDIR="/tmp/tempdir"
+    - export TMP="/tmp/tempdir"
+    - export TEMP="/tmp/tempdir"
+
+    # By default, Appium server version used is 1.7.2.
+    # You can switch to an alternate supported version from 1.6.5, 1.7.1, 1.7.2, 1.8.0 , 1.8.1, 1.9.1 by using a command like "avm 1.7.1"
+    # OR
+    # To install a newer version of Appium use the following commands:
+    # - export APPIUM_VERSION=1.8.1
+    # - avm $APPIUM_VERSION
+    # - ln -s /usr/local/avm/versions/$APPIUM_VERSION/node_modules/.bin/appium  /usr/local/avm/versions/$APPIUM_VERSION/node_modules/appium/bin/appium.js
+
+    # By default the ruby version installed is 2.5.3
+    - rvm use 2.5.3
+    # you can switch to an alternate ruby version using below command.
+    # - rvm install 2.3.1 --autolibs=0
+
+    # Unpackage and install the gems
+    - echo "Navigate to test package directory"
+    - cd $DEVICEFARM_TEST_PACKAGE_PATH
+
+    # Use a pre-configured ruby environment to run your tests.
+    # This environment has the following gems pre-installed (appium_lib (9.16.1), test-unit (3.2.9)) along with their dependencies.
+    # If you are using this env, please make sure you do not upload the Gemfile.lock while packaging your tests.
+    # If the Gemfile.lock contains different versions for the already installed packages, it will ignore the pre-installed packages.
+    # Using this env can help you speed up your test set up phase as you wont have to install all the gems.
+    # This default env is only available for ruby 2.5.3.
+    - rvm gemset use default-ruby-gemset-env-version-1 --create
+    # Alternatively, you can create a new virtual ruby env using the command:
+    #- rvm gemset use env --create
+
+    # Install the gems from the local vendor/cache directory
+    # - bundle install --local
+    # Optional command to install gems from the internet if not all the gems were packaged in vendor/cache directory.
+    - bundle install
+
+
+  # The pre-test phase includes commands that setup your test environment.
+  pre_test:
+    commands:
+    # We recommend starting appium server process in the background using the command below.
+    # Appium server log will go to $DEVICEFARM_LOG_DIR directory.
+    # The environment variables below will be auto-populated during run time.
+    - echo "Start appium server"
+    - >-
+      appium --log-timestamp --device-name $DEVICEFARM_DEVICE_NAME
+      --platform-name $DEVICEFARM_DEVICE_PLATFORM_NAME --app $DEVICEFARM_APP_PATH
+      --udid $DEVICEFARM_DEVICE_UDID --chromedriver-executable $DEVICEFARM_CHROMEDRIVER_EXECUTABLE  >> $DEVICEFARM_LOG_DIR/appiumlog.txt 2>&1 &
+
+    - >-
+      start_appium_timeout=0;
+      while [ true ];
+      do
+          if [ $start_appium_timeout -gt 60 ];
+          then
+              echo "appium server never started in 60 seconds. Exiting";
+              exit 1;
+          fi;
+          grep -i "Appium REST http interface listener started on 0.0.0.0:4723" $DEVICEFARM_LOG_DIR/appiumlog.txt >> /dev/null 2>&1;
+          if [ $? -eq 0 ];
+          then
+              echo "Appium REST http interface listener started on 0.0.0.0:4723";
+              break;
+          else
+              echo "Waiting for appium server to start. Sleeping for 1 second";
+              sleep 1;
+              start_appium_timeout=$((start_appium_timeout+1));
+          fi;
+      done;
+
+  # The test phase includes commands that run your test suite execution.
+  test:
+    commands:
+    # Your test package is downloaded in $DEVICEFARM_TEST_PACKAGE_PATH so we first change directory to that path.
+    - echo "Navigate to test source code"
+    - cd $DEVICEFARM_TEST_PACKAGE_PATH
+
+    - echo "Start Appium Ruby test"
+    # Modify/Enter the command below to start the tests. The comamnd should be similar to what you use to run the tests locally.
+    # "bundle exec" is a Bundle command to execute a script in the context of the current bundle.
+    # For e.g. assuming you run your tests locally using command "ruby YOUR_TEST_FILENAME.rb.", to run your ruby tests using bundle exec command you can use:
+    - ./run.rb android
+
+  # The post test phase includes are commands that are run after your tests are executed.
+  post_test:
+    commands:
+
+# The artifacts phase lets you specify the location where your tests logs, device logs will be stored.
+# And also let you specify the location of your test logs and artifacts which you want to be collected by Device Farm.
+# These logs and artifacts will be available through ListArtifacts API in Device Farm.
+artifacts:
+# By default, Device Farm will collect your artifacts from following directories
+- $DEVICEFARM_LOG_DIR

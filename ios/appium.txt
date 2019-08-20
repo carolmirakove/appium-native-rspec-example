@@ -1,9 +1,0 @@
-[caps]
-platformName = "ios"
-platformVersion = "7.1"
-deviceName = "iPhone Simulator"
-app = "../../app/UICatalog.app.zip"
-
-[appium_lib]
-sauce_username = false
-sauce_access_key = false
